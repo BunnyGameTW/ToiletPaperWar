@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
     const int CAN_NUMBER = 10;//罐頭連打數
     const float MAX_SKILL_VALUE = 100.0f;//技能最大值
-    const float ADD_SKILL_RATIO = 10.0f;//累積技能比例
+    const float ADD_SKILL_RATIO = 100.0f;//累積技能比例
     const float DECREASE_TIME = 3.0f;//減緩時間
 
     float skillValue, addSkillValue;
@@ -76,10 +76,21 @@ public class Player : MonoBehaviour
         addSkillValue = value;
     }
 
-    //設定被攻擊
+    //設定被使用技能
     public void SetIsSkilled(bool boolean)
     {
         isSkilled = boolean;
+    }
+
+    //取得是否被使用技能
+    public bool GetIsSkilled()
+    {
+        return isSkilled;
+    }
+
+    public float GetSkillTimer()
+    {
+        return skillTimer;
     }
 
     //private

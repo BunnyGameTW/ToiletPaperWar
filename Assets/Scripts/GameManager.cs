@@ -105,6 +105,14 @@ public class GameManager : MonoBehaviour
         float fillValue = toiletValue / MAX_TOILET_VALUE;
         leftBarImage.fillAmount = fillValue;
         rightBarImage.fillAmount = 1.0f - fillValue;
+        if (human.GetIsSkilled())
+        {
+            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));//human.GetSkillTimer()
+        }
+        else
+        {
+            rightBarImage.color = Color.white;
+        }
     }
         
 }
