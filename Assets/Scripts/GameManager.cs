@@ -20,15 +20,16 @@ public class GameManager : MonoBehaviour
 
     float timer;
     float toiletValue;
-    const float toiletPaperRatio = 0.5f;
-    const float MAX_TOILET_VALUE = 100.0f;
-    const float MIN_TOILET_VALUE = 0.0f;
+    const float TOILET_PAPER_RATIO = 0.5f;//衛生紙量
+    const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
+    const float MIN_TOILET_VALUE = 0.0f;//衛生紙最小值
+    const float ATTACK_RATIO = 3.0f;//攻擊比例
     bool isGameOver;
     
     // Start is called before the first frame update
     void Start()
     {
-        toiletValue = toiletPaperRatio * MAX_TOILET_VALUE;
+        toiletValue = TOILET_PAPER_RATIO * MAX_TOILET_VALUE;
         isGameOver = false;
         cat.attackEvent += OnPlayerAttack;
         human.attackEvent += OnPlayerAttack;
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    const float ATTACK_RATIO = 3.0f;
+
 
     //event
     void OnPlayerAttack(object sender, AttackEventArgs param)
@@ -107,11 +108,11 @@ public class GameManager : MonoBehaviour
         rightBarImage.fillAmount = 1.0f - fillValue;
         if (human.GetIsSkilled())
         {
-            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));//human.GetSkillTimer()
+            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));//TODOhuman.GetSkillTimer()
         }
         else
         {
-            rightBarImage.color = Color.white;
+            rightBarImage.color = Color.red;
         }
     }
         

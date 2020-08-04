@@ -26,7 +26,7 @@ public class SkillEventArgs : EventArgs
 public class Player : MonoBehaviour
 {
    
-    public PlayerType type;
+    protected PlayerType type;
     [Serializable]
     public struct PlayerInput
     {
@@ -39,36 +39,16 @@ public class Player : MonoBehaviour
 
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
-    const int CAN_NUMBER = 10;//罐頭連打數
     const float MAX_SKILL_VALUE = 100.0f;//技能最大值
     const float ADD_SKILL_RATIO = 100.0f;//累積技能比例
-    const float DECREASE_TIME = 3.0f;//減緩時間
+  
 
     float skillValue, addSkillValue;
-    bool isSkilled;
-    float skillTimer;
-    int canCounter;
+    protected bool isSkilled;
+   
     public event EventHandler<AttackEventArgs> attackEvent;
     public event EventHandler<SkillEventArgs> skillEvent;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        skillValue = addSkillValue = 0.0f;
-        skillTimer = 0.0f;
-        canCounter = 0;
-        isSkilled = false;
-        skillImage.sprite = disableKey;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        CheckCatSkill();
-        UpdateSkillValue();
-        DetectInput();
-    }
-   
     //public
     //設定累積技能速度
     public void SetAddSkillValue(float value)
@@ -88,14 +68,16 @@ public class Player : MonoBehaviour
         return isSkilled;
     }
 
-    public float GetSkillTimer()
+    //private
+    protected void InitVariable()
     {
-        return skillTimer;
+        skillValue = addSkillValue = 0.0f;
+        isSkilled = false;
+        skillImage.sprite = disableKey;
     }
 
-    //private
     //更新技能值
-    void UpdateSkillValue()
+    protected void UpdateSkillValue()
     {
         skillValue += addSkillValue * ADD_SKILL_RATIO * Time.deltaTime;
         if (skillValue >= MAX_SKILL_VALUE)
@@ -107,12 +89,12 @@ public class Player : MonoBehaviour
     }
 
     //偵測輸入
-    void DetectInput()
+    protected void DetectInput()
     {
         CheckAttack();
         CheckSkill();
     }
-  
+
     void CheckAttack()
     {
         if (Input.GetKeyDown(input.attack))
@@ -122,7 +104,6 @@ public class Player : MonoBehaviour
             {
                 attackEvent.Invoke(this, new AttackEventArgs(attackValue, type));
             }
-            CheckHumanSkill();
             attackImage.sprite = pressKey;
         }
         else if (Input.GetKeyUp(input.attack))
@@ -153,33 +134,5 @@ public class Player : MonoBehaviour
             return type == PlayerType.CAT ? 0.0f : ATTACK_VALUE * DECREASE_ATK_RATIO;
         }
         return ATTACK_VALUE;
-    }
-
-    //檢查人類技能
-    void CheckHumanSkill()
-    {
-        if (isSkilled && type == PlayerType.CAT)
-        {
-            canCounter++;
-            if (canCounter == CAN_NUMBER)
-            {
-                canCounter = 0;
-                isSkilled = false;
-            }
-        }
-    }
-
-    //檢查貓咪技能
-    void CheckCatSkill()
-    {
-        if (isSkilled && type == PlayerType.HUMAN)
-        {
-            skillTimer += Time.deltaTime;
-            if (skillTimer >= DECREASE_TIME)
-            {
-                skillTimer = 0.0f;
-                isSkilled = false;
-            }
-        }
     }
 }
