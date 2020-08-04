@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum PlayerType
 {
@@ -45,7 +46,6 @@ public class GameManager : MonoBehaviour
             float fillValue = toiletValue / MAX_TOILET_VALUE;
             cat.SetAddSkillValue(1.0f - fillValue);
             human.SetAddSkillValue(fillValue);
-
             RefreshTimer();
             UpdateUI();
         }
@@ -68,6 +68,21 @@ public class GameManager : MonoBehaviour
     }
 
 
+    void UpdateUI()
+    {
+        timeText.text = Mathf.Ceil(gameTime).ToString();
+        float fillValue = toiletValue / MAX_TOILET_VALUE;
+        leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
+        rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
+        if (human.GetIsSkilled())
+        {
+            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+        }
+        else
+        {
+            rightBarImage.color = Color.red;//TODO 顏色要再訂
+        }
+    }
 
     //event
     void OnPlayerAttack(object sender, AttackEventArgs param)
@@ -100,20 +115,4 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateUI()
-    {
-        timeText.text = Mathf.Ceil(gameTime).ToString();
-        float fillValue = toiletValue / MAX_TOILET_VALUE;
-        leftBarImage.fillAmount = fillValue;
-        rightBarImage.fillAmount = 1.0f - fillValue;
-        if (human.GetIsSkilled())
-        {
-            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));//TODOhuman.GetSkillTimer()
-        }
-        else
-        {
-            rightBarImage.color = Color.red;
-        }
-    }
-        
 }

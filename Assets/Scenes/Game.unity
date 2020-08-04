@@ -1705,11 +1705,13 @@ MonoBehaviour:
   input:
     attack: 44
     skill: 46
-  attackImage: {fileID: 1399160281}
-  skillImage: {fileID: 989045481}
+  attackKeyImage: {fileID: 0}
+  skillKeyImage: {fileID: 0}
   pressKey: {fileID: 21300000, guid: 5b321d4760f872f4aa9d4c5d856394c0, type: 3}
   normalKey: {fileID: 21300000, guid: 2b0d4e7bf344774459d025e4c723ba78, type: 3}
   disableKey: {fileID: 21300000, guid: cc3c83ba2287c1b4ab01866e3b98285c, type: 3}
+  toiletPaperRollImage: {fileID: 0}
+  toiletPaperImage: {fileID: 0}
 --- !u!1 &1399160279
 GameObject:
   m_ObjectHideFlags: 0
@@ -1987,11 +1989,23 @@ MonoBehaviour:
   input:
     attack: 122
     skill: 120
-  attackImage: {fileID: 264403292}
-  skillImage: {fileID: 1536573371}
+  attackKeyImage: {fileID: 0}
+  skillKeyImage: {fileID: 0}
   pressKey: {fileID: 21300000, guid: 2b0d4e7bf344774459d025e4c723ba78, type: 3}
   normalKey: {fileID: 21300000, guid: 5b321d4760f872f4aa9d4c5d856394c0, type: 3}
   disableKey: {fileID: 21300000, guid: cc3c83ba2287c1b4ab01866e3b98285c, type: 3}
+  toiletPaperRollImage: {fileID: 1926376987}
+  toiletPaperImage: {fileID: 1429309202}
+  leftPawImage: {fileID: 1712750865}
+  rightPawImage: {fileID: 802620112}
+  pawNormalPosition: {fileID: 384392957}
+  pawSkillPosition: {fileID: 16132104}
+  normalPawLeft: {fileID: 21300000, guid: c7c91c2ffd7432b41948fc797c82ed4f, type: 3}
+  normalPawRight: {fileID: 21300000, guid: 3bf9599326c84844ebccb77172e773c3, type: 3}
+  attackPawLeft: {fileID: 21300000, guid: 7f2399040011fc44ba794af930a3336d, type: 3}
+  attackPawRight: {fileID: 21300000, guid: 2abc756cc4bf749459d9a9bfbb6dab7c, type: 3}
+  beSkilledGameObject: {fileID: 649549204}
+  canNumberText: {fileID: 1224569300}
 --- !u!1 &1712750863
 GameObject:
   m_ObjectHideFlags: 0

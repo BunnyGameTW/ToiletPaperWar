@@ -34,8 +34,9 @@ public class Player : MonoBehaviour
         public KeyCode skill;
     }
     public PlayerInput input;
-    public Image attackImage, skillImage;
+    public Image attackKeyImage, skillKeyImage;
     public Sprite pressKey, normalKey, disableKey;
+    public Image toiletPaperRollImage, toiletPaperImage;
 
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
@@ -73,7 +74,7 @@ public class Player : MonoBehaviour
     {
         skillValue = addSkillValue = 0.0f;
         isSkilled = false;
-        skillImage.sprite = disableKey;
+        skillKeyImage.sprite = disableKey;
     }
 
     //更新技能值
@@ -83,9 +84,9 @@ public class Player : MonoBehaviour
         if (skillValue >= MAX_SKILL_VALUE)
         {
             skillValue = MAX_SKILL_VALUE;
-            skillImage.sprite = normalKey;
+            skillKeyImage.sprite = normalKey;
         }
-        skillImage.fillAmount = skillValue / MAX_SKILL_VALUE;
+        skillKeyImage.fillAmount = skillValue / MAX_SKILL_VALUE;
     }
 
     //偵測輸入
@@ -104,11 +105,11 @@ public class Player : MonoBehaviour
             {
                 attackEvent.Invoke(this, new AttackEventArgs(attackValue, type));
             }
-            attackImage.sprite = pressKey;
+            attackKeyImage.sprite = pressKey;
         }
         else if (Input.GetKeyUp(input.attack))
         {
-            attackImage.sprite = normalKey;
+            attackKeyImage.sprite = normalKey;
         }
     }
 
@@ -116,13 +117,13 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(input.skill) && skillValue == MAX_SKILL_VALUE)
         {
-            skillImage.sprite = pressKey;
+            skillKeyImage.sprite = pressKey;
             skillValue = 0.0f;
             skillEvent.Invoke(this, new SkillEventArgs(type));
         }
         else if (Input.GetKeyUp(input.skill) && skillValue != MAX_SKILL_VALUE)
         {
-            skillImage.sprite = disableKey;
+            skillKeyImage.sprite = disableKey;
         }
     }
 
