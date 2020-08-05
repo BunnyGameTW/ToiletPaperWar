@@ -11,8 +11,8 @@ public class Human : Player
     void Start()
     {
         type = PlayerType.HUMAN;
-        InitVariable();
         skillTimer = 0.0f;
+        Init();
     }
 
     // Update is called once per frame

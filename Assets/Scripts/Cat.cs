@@ -19,8 +19,8 @@ public class Cat : Player
     void Start()
     {
         type = PlayerType.CAT;
-        InitVariable();
         canCounter = 0;
+        Init();
     }
 
     // Update is called once per frame

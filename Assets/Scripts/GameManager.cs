@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour
 
     float timer;
     float toiletValue;
-    const float TOILET_PAPER_RATIO = 0.5f;//衛生紙量
-    const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
+    const float TOILET_PAPER_RATIO = 0.0f;//衛生紙量
     const float MIN_TOILET_VALUE = 0.0f;//衛生紙最小值
-    const float ATTACK_RATIO = 3.0f;//攻擊比例
+    public const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
+    public const float ATTACK_RATIO = 3.0f;//攻擊比例
     bool isGameOver;
     
     // Start is called before the first frame update
@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            human.UpdateToiletPaperPosition(toiletValue);
+            cat.UpdateToiletPaperPosition(toiletValue);
             //TODO 顯示贏家
             Debug.Log("winner->" + winner.ToString());
         }
@@ -64,7 +66,7 @@ public class GameManager : MonoBehaviour
         if(gameTime <= 0.0f)
         {
             gameTime = 0.0f;
-            isGameOver = true;
+            isGameOver = true;//TODO set player cant control
             winner = toiletValue >= MAX_TOILET_VALUE / 2 ? PlayerType.CAT : PlayerType.HUMAN;
         }
     }
@@ -76,6 +78,9 @@ public class GameManager : MonoBehaviour
         float fillValue = toiletValue / MAX_TOILET_VALUE;
         leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
         rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
+        human.UpdateToiletPaperPosition(toiletValue);
+        cat.UpdateToiletPaperPosition(toiletValue);
+
         if (human.GetIsSkilled())
         {
             rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
@@ -96,6 +101,7 @@ public class GameManager : MonoBehaviour
             toiletValue = MAX_TOILET_VALUE;
             winner = PlayerType.CAT;
             isGameOver = true;
+          
         }
         else if (toiletValue <= MIN_TOILET_VALUE)
         {
