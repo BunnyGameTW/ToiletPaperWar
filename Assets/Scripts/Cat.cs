@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
 public class Cat : Player
 {
     int canCounter;
@@ -26,10 +28,31 @@ public class Cat : Player
     {
         UpdateSkillValue();
         DetectInput();
-        if (Input.GetKeyDown(input.attack) && isSkilled)
+        if (Input.GetKeyDown(input.attack))
         {
-            HandleBeSkilled();
+            rightPawImage.sprite = attackPawRight;
+            if (isSkilled) HandleBeSkilled();
         }
+        else if (Input.GetKeyUp(input.attack))
+        {
+            rightPawImage.sprite = normalPawRight;
+        }
+    }
+
+    public override void SetUseSkill(bool boolean)
+    {
+        Debug.Log("SetUseSkill overriled"  + boolean);
+        if (boolean)
+        {
+            leftPawImage.sprite = attackPawLeft;
+            leftPawImage.transform.position = pawSkillPosition.position;
+        }
+        else
+        {
+            leftPawImage.sprite = normalPawLeft;
+            leftPawImage.transform.position = pawNormalPosition.position;
+        }
+        leftPawImage.SetNativeSize();
     }
 
     //處理被使用技能
@@ -40,6 +63,7 @@ public class Cat : Player
         {
             canCounter = 0;
             isSkilled = false;
+            UnSkilledEvent();
         }
     }
 }

@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
         human.attackEvent += OnPlayerAttack;
         cat.skillEvent += OnPlayerSkill;
         human.skillEvent += OnPlayerSkill;
+        cat.unskilledEvent += OnPlayerUnSkilled;
+        human.unskilledEvent += OnPlayerUnSkilled;
     }
 
     // Update is called once per frame
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+ 
     void UpdateUI()
     {
         timeText.text = Mathf.Ceil(gameTime).ToString();
@@ -115,4 +117,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void OnPlayerUnSkilled(object sender, SkillEventArgs param)
+    {
+        if (param.playerType == PlayerType.CAT)
+        {
+            human.SetUseSkill(false);
+        }
+        else
+        {
+            cat.SetUseSkill(false);
+        }
+    }
 }

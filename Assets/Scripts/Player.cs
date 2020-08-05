@@ -49,6 +49,7 @@ public class Player : MonoBehaviour
    
     public event EventHandler<AttackEventArgs> attackEvent;
     public event EventHandler<SkillEventArgs> skillEvent;
+    public event EventHandler<SkillEventArgs> unskilledEvent;
 
     //public
     //設定累積技能速度
@@ -113,10 +114,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    public virtual void SetUseSkill(bool boolean)
+    {
+    }
     void CheckSkill()
     {
         if (Input.GetKeyDown(input.skill) && skillValue == MAX_SKILL_VALUE)
         {
+            
+            SetUseSkill(true);
             skillKeyImage.sprite = pressKey;
             skillValue = 0.0f;
             skillEvent.Invoke(this, new SkillEventArgs(type));
@@ -135,5 +141,10 @@ public class Player : MonoBehaviour
             return type == PlayerType.CAT ? 0.0f : ATTACK_VALUE * DECREASE_ATK_RATIO;
         }
         return ATTACK_VALUE;
+    }
+    //被使用技能結束事件
+    protected void UnSkilledEvent()
+    {
+        unskilledEvent.Invoke(this, new SkillEventArgs(type));
     }
 }

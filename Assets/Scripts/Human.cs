@@ -32,6 +32,19 @@ public class Human : Player
         return skillTimer;
     }
 
+    public override void SetUseSkill(bool boolean)
+    {
+        Debug.Log("human SetUseSkill overriled" + boolean);
+        if (boolean)
+        {
+           //TODO 使用技能時人類的顯示
+        }
+        else
+        {
+           
+        }
+      
+    }
 
     //檢查貓咪技能
     void HandleBeSkilled()
@@ -41,6 +54,7 @@ public class Human : Player
         {
             skillTimer = 0.0f;
             isSkilled = false;
+            UnSkilledEvent();
         }
     }
 }
