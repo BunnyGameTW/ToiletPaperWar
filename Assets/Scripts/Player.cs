@@ -37,16 +37,19 @@ public class Player : MonoBehaviour
     public Image attackKeyImage, skillKeyImage;
     public Sprite pressKey, normalKey, disableKey;
     public Image toiletPaperRollImage, toiletPaperImage;
-    public GameObject toiletPaperParent;
-    
+    public GameObject toiletPaperParent, gameObjectSkilled;
+    public Sprite emptyToiletPaperRoll;
+
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
     const float MAX_SKILL_VALUE = 100.0f;//技能最大值
     const float ADD_SKILL_RATIO = 100.0f;//累積技能比例
     const float TOILET_PAPER_OFFSET_Y = 250.0f;
+    const float MIN_PAPER_ROLL_SCALE = 0.5f;
+    const float MAX_PAPER_ROLL_SCALE = 1.0f;
 
     float skillValue, addSkillValue;
-    protected bool isSkilled;
+    protected bool isSkilled, isGameOver;
     RectTransform toiletPaperParentTransform;
     public event EventHandler<AttackEventArgs> attackEvent;
     public event EventHandler<SkillEventArgs> skillEvent;
@@ -60,9 +63,10 @@ public class Player : MonoBehaviour
     }
 
     //設定被使用技能
-    public void SetIsSkilled(bool boolean)
+    public virtual void SetIsSkilled(bool boolean)
     {
         isSkilled = boolean;
+        gameObjectSkilled.SetActive(true);
     }
 
     //取得是否被使用技能
@@ -70,8 +74,9 @@ public class Player : MonoBehaviour
     {
         return isSkilled;
     }
-
-    public void UpdateToiletPaperPosition(float toiletPaperValue)//TODO 衛生紙粗細 & 捲筒換圖片
+  
+    //更新衛生紙動態
+    public void UpdateToiletPaper(float toiletPaperValue)
     {
         float y = Mathf.Lerp(
             toiletPaperParentTransform.localPosition.y, 
@@ -79,13 +84,42 @@ public class Player : MonoBehaviour
             0.5f
         );
         toiletPaperParentTransform.localPosition = new Vector3(0, y, 0);
+
+        if (!isGameOver)
+        {
+            float scaleY = Mathf.Lerp(
+                toiletPaperRollImage.rectTransform.localScale.y,
+                MIN_PAPER_ROLL_SCALE + (MAX_PAPER_ROLL_SCALE - MIN_PAPER_ROLL_SCALE) * (GameManager.MAX_TOILET_VALUE - toiletPaperValue) / GameManager.MAX_TOILET_VALUE,
+                0.5f
+            );
+            toiletPaperRollImage.rectTransform.localScale = new Vector3(
+                toiletPaperRollImage.rectTransform.localScale.x,
+                scaleY,
+                toiletPaperRollImage.rectTransform.localScale.z
+            );
+        }
+        if (toiletPaperValue == GameManager.MAX_TOILET_VALUE)
+        {
+            toiletPaperRollImage.rectTransform.localScale = new Vector3(
+                toiletPaperRollImage.rectTransform.localScale.x,
+                MAX_PAPER_ROLL_SCALE,
+                toiletPaperRollImage.rectTransform.localScale.z
+            );
+            toiletPaperRollImage.sprite = emptyToiletPaperRoll;
+            toiletPaperRollImage.SetNativeSize();
+        }
+    }
+
+    public void SetGameOver()
+    {
+        isGameOver = true;
     }
 
     //private
     protected void Init()
     {
         skillValue = addSkillValue = 0.0f;
-        isSkilled = false;
+        isSkilled = isGameOver = false;
         skillKeyImage.sprite = disableKey;
         toiletPaperParentTransform = toiletPaperParent.GetComponent<RectTransform>();
         InitToiletPapers();

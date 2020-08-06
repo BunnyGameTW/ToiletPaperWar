@@ -1172,7 +1172,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &649549205
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2001,7 +2001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 188}
+  m_AnchoredPosition: {x: 0, y: 530}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1224569300
@@ -2055,8 +2055,9 @@ GameObject:
   - component: {fileID: 1296318630}
   - component: {fileID: 1296318632}
   - component: {fileID: 1296318631}
+  - component: {fileID: 1296318633}
   m_Layer: 5
-  m_Name: Image
+  m_Name: pawImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2069,17 +2070,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296318629}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.996938, w: 0.07819715}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 82395507}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 171.03001}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -124, y: -363}
-  m_SizeDelta: {x: 127, y: 200}
+  m_AnchoredPosition: {x: -89, y: -572}
+  m_SizeDelta: {x: 80, y: 173}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1296318631
 MonoBehaviour:
@@ -2099,7 +2100,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bc0113c91225dcc459acb757258de35b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7c91c2ffd7432b41948fc797c82ed4f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2117,6 +2118,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296318629}
   m_CullTransparentMesh: 0
+--- !u!95 &1296318633
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296318629}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4deb7a017fb724b46b08592b3ac8a911, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1349786175
 GameObject:
   m_ObjectHideFlags: 0
@@ -2181,6 +2201,9 @@ MonoBehaviour:
   toiletPaperRollImage: {fileID: 78966737}
   toiletPaperImage: {fileID: 1926314624}
   toiletPaperParent: {fileID: 1524713267}
+  gameObjectSkilled: {fileID: 82395506}
+  emptyToiletPaperRoll: {fileID: 21300000, guid: 2ba8e64120c685d479fd46c4b640a188,
+    type: 3}
 --- !u!1 &1399160279
 GameObject:
   m_ObjectHideFlags: 0
@@ -2430,6 +2453,9 @@ MonoBehaviour:
   toiletPaperRollImage: {fileID: 1926376987}
   toiletPaperImage: {fileID: 1744804711}
   toiletPaperParent: {fileID: 1618893763}
+  gameObjectSkilled: {fileID: 649549204}
+  emptyToiletPaperRoll: {fileID: 21300000, guid: 2ba8e64120c685d479fd46c4b640a188,
+    type: 3}
   leftPawImage: {fileID: 1712750865}
   rightPawImage: {fileID: 802620112}
   pawNormalPosition: {fileID: 384392957}
@@ -2438,7 +2464,7 @@ MonoBehaviour:
   normalPawRight: {fileID: 21300000, guid: 3bf9599326c84844ebccb77172e773c3, type: 3}
   attackPawLeft: {fileID: 21300000, guid: 7f2399040011fc44ba794af930a3336d, type: 3}
   attackPawRight: {fileID: 21300000, guid: 2abc756cc4bf749459d9a9bfbb6dab7c, type: 3}
-  beSkilledGameObject: {fileID: 649549204}
+  gameObjectPaper: {fileID: 1803120120}
   canNumberText: {fileID: 1224569300}
 --- !u!1 &1618893763
 GameObject:
@@ -3035,7 +3061,7 @@ GameObject:
   - component: {fileID: 2040813250}
   - component: {fileID: 2040813249}
   m_Layer: 5
-  m_Name: Text
+  m_Name: skilledAttackValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3091,7 +3117,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Weak
+  m_Text: ATK * 0.1
 --- !u!222 &2040813250
 CanvasRenderer:
   m_ObjectHideFlags: 0

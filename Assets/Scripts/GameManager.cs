@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     float timer;
     float toiletValue;
-    const float TOILET_PAPER_RATIO = 0.0f;//衛生紙量
+    const float TOILET_PAPER_RATIO = 0.5f;//衛生紙量
     const float MIN_TOILET_VALUE = 0.0f;//衛生紙最小值
     public const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
     public const float ATTACK_RATIO = 3.0f;//攻擊比例
@@ -53,8 +53,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            human.UpdateToiletPaperPosition(toiletValue);
-            cat.UpdateToiletPaperPosition(toiletValue);
+            human.UpdateToiletPaper(toiletValue);
+            cat.UpdateToiletPaper(toiletValue);
             //TODO 顯示贏家
             Debug.Log("winner->" + winner.ToString());
         }
@@ -66,20 +66,27 @@ public class GameManager : MonoBehaviour
         if(gameTime <= 0.0f)
         {
             gameTime = 0.0f;
-            isGameOver = true;//TODO set player cant control
+            SetGameOver();
             winner = toiletValue >= MAX_TOILET_VALUE / 2 ? PlayerType.CAT : PlayerType.HUMAN;
         }
     }
 
- 
+    void SetGameOver()
+    {
+        isGameOver = true;
+        cat.SetGameOver();
+        human.SetGameOver();
+    }
+
+
     void UpdateUI()
     {
         timeText.text = Mathf.Ceil(gameTime).ToString();
         float fillValue = toiletValue / MAX_TOILET_VALUE;
         leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
         rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
-        human.UpdateToiletPaperPosition(toiletValue);
-        cat.UpdateToiletPaperPosition(toiletValue);
+        human.UpdateToiletPaper(toiletValue);
+        cat.UpdateToiletPaper(toiletValue);
 
         if (human.GetIsSkilled())
         {
@@ -100,14 +107,14 @@ public class GameManager : MonoBehaviour
         {
             toiletValue = MAX_TOILET_VALUE;
             winner = PlayerType.CAT;
-            isGameOver = true;
+            SetGameOver();
           
         }
         else if (toiletValue <= MIN_TOILET_VALUE)
         {
             toiletValue = MIN_TOILET_VALUE;
             winner = PlayerType.HUMAN;
-            isGameOver = true;
+            SetGameOver();
         }
     }
 

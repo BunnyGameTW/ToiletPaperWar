@@ -12,7 +12,7 @@ public class Cat : Player
     public Image leftPawImage, rightPawImage;
     public Transform pawNormalPosition, pawSkillPosition;
     public Sprite normalPawLeft, normalPawRight, attackPawLeft, attackPawRight;
-    public GameObject beSkilledGameObject;
+    public GameObject gameObjectPaper;
     public Text canNumberText;
 
     // Start is called before the first frame update
@@ -26,22 +26,25 @@ public class Cat : Player
     // Update is called once per frame
     void Update()
     {
-        UpdateSkillValue();
-        DetectInput();
-        if (Input.GetKeyDown(input.attack))
+        if (!isGameOver)
         {
-            rightPawImage.sprite = attackPawRight;
-            if (isSkilled) HandleBeSkilled();
-        }
-        else if (Input.GetKeyUp(input.attack))
-        {
-            rightPawImage.sprite = normalPawRight;
+            UpdateSkillValue();
+            DetectInput();
+            if (Input.GetKeyDown(input.attack))
+            {
+                rightPawImage.sprite = attackPawRight;
+                if (isSkilled) HandleBeSkilled();
+            }
+            else if (Input.GetKeyUp(input.attack))
+            {
+                rightPawImage.sprite = normalPawRight;
+            }
         }
     }
 
+    //設定使用技能
     public override void SetUseSkill(bool boolean)
     {
-        Debug.Log("SetUseSkill overriled"  + boolean);
         if (boolean)
         {
             leftPawImage.sprite = attackPawLeft;
@@ -55,14 +58,29 @@ public class Cat : Player
         leftPawImage.SetNativeSize();
     }
 
+    //設定被使用技能
+    public override void SetIsSkilled(bool boolean)
+    {
+        base.SetIsSkilled(boolean);
+        if (boolean)
+        {
+
+            canNumberText.text = "x" + CAN_NUMBER;
+            gameObjectPaper.SetActive(false);
+        }
+    }
+
     //處理被使用技能
     void HandleBeSkilled()
     {
         canCounter++;
+        canNumberText.text = "x" + (CAN_NUMBER - canCounter);
         if (canCounter == CAN_NUMBER)
         {
             canCounter = 0;
             isSkilled = false;
+            gameObjectSkilled.SetActive(false);
+            gameObjectPaper.SetActive(true);
             UnSkilledEvent();
         }
     }
