@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public Text timeText;
     public Image leftBarImage, rightBarImage;
     public Player cat, human;
+    public Color humanSkilledBarColor, humanNormalBarColor;
 
     float timer;
     float toiletValue;
@@ -90,11 +91,11 @@ public class GameManager : MonoBehaviour
 
         if (human.GetIsSkilled())
         {
-            rightBarImage.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+            rightBarImage.color = Color.Lerp(Color.white, humanSkilledBarColor, Mathf.PingPong(Time.time, 1));
         }
         else
         {
-            rightBarImage.color = Color.red;//TODO 顏色要再訂
+            rightBarImage.color = humanNormalBarColor;
         }
     }
 

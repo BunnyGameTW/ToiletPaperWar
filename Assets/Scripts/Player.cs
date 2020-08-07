@@ -34,8 +34,8 @@ public class Player : MonoBehaviour
         public KeyCode skill;
     }
     public PlayerInput input;
-    public Image attackKeyImage, skillKeyImage;
-    public Sprite pressKey, normalKey, disableKey;
+    public Image attackKeyImage, skillKeyImage, disableMaskImage;
+    public Sprite pressKey, normalKey;
     public Image toiletPaperRollImage, toiletPaperImage;
     public GameObject toiletPaperParent, gameObjectSkilled;
     public Sprite emptyToiletPaperRoll;
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
     const float MAX_SKILL_VALUE = 100.0f;//技能最大值
-    const float ADD_SKILL_RATIO = 100.0f;//累積技能比例
+    const float ADD_SKILL_RATIO = 60.0f;//累積技能比例
     const float TOILET_PAPER_OFFSET_Y = 250.0f;
     const float MIN_PAPER_ROLL_SCALE = 0.5f;
     const float MAX_PAPER_ROLL_SCALE = 1.0f;
@@ -120,7 +120,6 @@ public class Player : MonoBehaviour
     {
         skillValue = addSkillValue = 0.0f;
         isSkilled = isGameOver = false;
-        skillKeyImage.sprite = disableKey;
         toiletPaperParentTransform = toiletPaperParent.GetComponent<RectTransform>();
         InitToiletPapers();
     }
@@ -132,9 +131,8 @@ public class Player : MonoBehaviour
         if (skillValue >= MAX_SKILL_VALUE)
         {
             skillValue = MAX_SKILL_VALUE;
-            skillKeyImage.sprite = normalKey;
         }
-        skillKeyImage.fillAmount = skillValue / MAX_SKILL_VALUE;
+        disableMaskImage.fillAmount = 1.0f - skillValue / MAX_SKILL_VALUE;
     }
 
     //偵測輸入
@@ -165,15 +163,14 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(input.skill) && skillValue == MAX_SKILL_VALUE)
         {
-            
-            SetUseSkill(true);
             skillKeyImage.sprite = pressKey;
+        }
+        else if (Input.GetKeyUp(input.skill) && skillValue == MAX_SKILL_VALUE)
+        {
+            SetUseSkill(true);
             skillValue = 0.0f;
             skillEvent.Invoke(this, new SkillEventArgs(type));
-        }
-        else if (Input.GetKeyUp(input.skill) && skillValue != MAX_SKILL_VALUE)
-        {
-            skillKeyImage.sprite = disableKey;
+            skillKeyImage.sprite = normalKey;
         }
     }
 

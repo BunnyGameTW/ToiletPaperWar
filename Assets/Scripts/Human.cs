@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Human : Player
 {
+    public Sprite normalSpriteL, attackSpriteL, normalSpriteR, attackSpriteR;
+    public RectTransform normalPositionL, normalPositionR, attackPositionL, attackPositionR;
+    public Image skillImage, attackImage;
+
     const float DECREASE_TIME = 3.0f;//減緩時間
     float skillTimer;
     Animator skilledAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +31,19 @@ public class Human : Player
             if (isSkilled)
             {
                 HandleBeSkilled();
+            }
+
+            if (Input.GetKeyDown(input.attack))
+            {
+                attackImage.sprite = attackSpriteL;
+                attackImage.SetNativeSize();
+                attackImage.rectTransform.localPosition = attackPositionL.localPosition;
+            }
+            else if (Input.GetKeyUp(input.attack))
+            {
+                attackImage.sprite = normalSpriteL;
+                attackImage.SetNativeSize();
+                attackImage.rectTransform.localPosition = normalPositionL.localPosition;
             }
         }
     }
@@ -48,11 +66,15 @@ public class Human : Player
     {
         if (boolean)
         {
-           //TODO 使用技能時人類的顯示
+            skillImage.sprite = attackSpriteR;
+            skillImage.SetNativeSize();
+            skillImage.rectTransform.localPosition = attackPositionR.localPosition;
         }
         else
         {
-           
+            skillImage.sprite = normalSpriteR;
+            skillImage.SetNativeSize();
+            skillImage.rectTransform.localPosition = normalPositionR.localPosition;
         }
       
     }
