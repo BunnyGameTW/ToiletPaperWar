@@ -9,17 +9,14 @@ public class ChangeScene : MonoBehaviour
     bool isStartFade, isStartFadeOut;
     float timer;
     string sceneName;
-
+    AudioSource audioSource;
     void Awake()
     {
-        Debug.Log("Awake");
         GameObject[] objs = GameObject.FindGameObjectsWithTag("changeScene");
-
         if (objs.Length > 1)
         {
             Destroy(this.gameObject);
         }
-
         DontDestroyOnLoad(this.gameObject);
 
         objs = GameObject.FindGameObjectsWithTag("fade");
@@ -34,9 +31,9 @@ public class ChangeScene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start");
         isStartFadeOut = isStartFade = false;
         timer = 0.0f;
+        audioSource = gameObjectFade.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -54,6 +51,7 @@ public class ChangeScene : MonoBehaviour
                 {
                     gameObjectFade.transform.GetChild(i).gameObject.GetComponent<Animation>().Play("fadeOut");
                 }
+                audioSource.Play();
                 isStartFadeOut = true;
             }
         }
@@ -79,6 +77,7 @@ public class ChangeScene : MonoBehaviour
             gameObjectFade.transform.GetChild(i).gameObject.SetActive(true);
             gameObjectFade.transform.GetChild(i).gameObject.GetComponent<Animation>().Play("fadeIn");
         }
+        audioSource.Play();
         isStartFade = true;
     }
 }

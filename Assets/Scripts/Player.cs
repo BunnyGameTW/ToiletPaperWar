@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
     public Image toiletPaperRollImage, toiletPaperImage;
     public GameObject toiletPaperParent, gameObjectSkilled;
     public Sprite emptyToiletPaperRoll;
+    public AudioSource audioSource;
+    public AudioClip attack, skill, skilled;
 
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例

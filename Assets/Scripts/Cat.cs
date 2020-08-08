@@ -34,6 +34,7 @@ public class Cat : Player
             {
                 rightPawImage.sprite = attackPawRight;
                 if (isSkilled) HandleBeSkilled();
+                audioSource.PlayOneShot(isSkilled ? skilled : attack);
             }
             else if (Input.GetKeyUp(input.attack))
             {
@@ -47,6 +48,7 @@ public class Cat : Player
     {
         if (boolean)
         {
+            audioSource.PlayOneShot(skill);
             leftPawImage.sprite = attackPawLeft;
             leftPawImage.transform.position = pawSkillPosition.position;
         }
