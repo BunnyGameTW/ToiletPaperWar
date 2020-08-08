@@ -9,9 +9,11 @@ public class Cat : Player
     int canCounter;
     const int CAN_NUMBER = 10;//罐頭連打數
 
-    public Image leftPawImage, rightPawImage;
-    public Transform pawNormalPosition, pawSkillPosition;
-    public Sprite normalPawLeft, normalPawRight, attackPawLeft, attackPawRight;
+    public Image leftPawImage, rightPawImage, bodyImage;
+    public Transform pawNormalPosition, pawSkillPosition, pawNormalPositionR, 
+        pawSkilledPositionR, bodyNormalPosition, bodySkilledPosition;
+    public Sprite normalPawLeft, normalPawRight, attackPawLeft, attackPawRight, 
+        skilledBody, normalBody, skilledPawNormalRight, skilledPawAttackRight;
     public GameObject gameObjectPaper;
     public Text canNumberText;
 
@@ -32,13 +34,23 @@ public class Cat : Player
             DetectInput();
             if (Input.GetKeyDown(input.attack))
             {
-                rightPawImage.sprite = attackPawRight;
-                if (isSkilled) HandleBeSkilled();
-                audioSource.PlayOneShot(isSkilled ? skilled : attack);
+                if (isSkilled)
+                {
+                    rightPawImage.sprite = skilledPawAttackRight;
+                    HandleBeSkilled();
+                    audioSource.PlayOneShot(skilled);
+                }
+                else
+                {
+                    rightPawImage.sprite = attackPawRight;
+                    audioSource.PlayOneShot(attack);
+                }
+                rightPawImage.SetNativeSize();
             }
             else if (Input.GetKeyUp(input.attack))
             {
-                rightPawImage.sprite = normalPawRight;
+                rightPawImage.sprite = isSkilled ? skilledPawNormalRight : normalPawRight;
+                rightPawImage.SetNativeSize();
             }
         }
     }
@@ -66,10 +78,22 @@ public class Cat : Player
         base.SetIsSkilled(boolean);
         if (boolean)
         {
-
+            SetSkilledUI(boolean);
             canNumberText.text = "x" + CAN_NUMBER;
-            gameObjectPaper.SetActive(false);
         }
+    }
+
+    void SetSkilledUI(bool boolean)
+    {
+        gameObjectPaper.SetActive(!boolean);
+        leftPawImage.gameObject.SetActive(!boolean);
+        bodyImage.sprite = boolean ? skilledBody: normalBody;
+        bodyImage.SetNativeSize();
+        bodyImage.transform.localPosition = boolean ? bodySkilledPosition.localPosition : bodyNormalPosition.localPosition;
+        rightPawImage.sprite = boolean ? skilledPawNormalRight : normalPawRight;
+        rightPawImage.SetNativeSize();
+        rightPawImage.transform.localPosition = boolean ? pawSkilledPositionR.localPosition : pawNormalPositionR.localPosition;
+        rightPawImage.transform.localRotation = boolean ? pawSkilledPositionR.localRotation : pawNormalPositionR.localRotation;
     }
 
     //處理被使用技能
@@ -81,8 +105,8 @@ public class Cat : Player
         {
             canCounter = 0;
             isSkilled = false;
+            SetSkilledUI(false);
             gameObjectSkilled.SetActive(false);
-            gameObjectPaper.SetActive(true);
             UnSkilledEvent();
         }
     }

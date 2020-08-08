@@ -127,7 +127,7 @@ public class Player : MonoBehaviour
     }
 
     //更新技能值
-    protected void UpdateSkillValue()
+    protected void UpdateSkillValue()//TODO 被使用技能時不累積
     {
         skillValue += addSkillValue * ADD_SKILL_RATIO * Time.deltaTime;
         if (skillValue >= MAX_SKILL_VALUE)
