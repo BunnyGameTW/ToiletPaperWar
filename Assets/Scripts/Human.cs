@@ -35,6 +35,7 @@ public class Human : Player
 
             if (Input.GetKeyDown(input.attack))
             {
+                audioSource.PlayOneShot(isSkilled ? skilled : attack);
                 attackImage.sprite = attackSpriteL;
                 attackImage.SetNativeSize();
                 attackImage.rectTransform.localPosition = attackPositionL.localPosition;
@@ -66,6 +67,7 @@ public class Human : Player
     {
         if (boolean)
         {
+            audioSource.PlayOneShot(skill);
             skillImage.sprite = attackSpriteR;
             skillImage.SetNativeSize();
             skillImage.rectTransform.localPosition = attackPositionR.localPosition;

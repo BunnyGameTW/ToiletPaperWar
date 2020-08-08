@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
     public Image toiletPaperRollImage, toiletPaperImage;
     public GameObject toiletPaperParent, gameObjectSkilled;
     public Sprite emptyToiletPaperRoll;
+    public AudioSource audioSource;
+    public AudioClip attack, skill, skilled;
 
     const float ATTACK_VALUE = 1.0f;//攻擊力
     const float DECREASE_ATK_RATIO = 0.1f;//減緩攻擊比例
@@ -125,7 +127,7 @@ public class Player : MonoBehaviour
     }
 
     //更新技能值
-    protected void UpdateSkillValue()
+    protected void UpdateSkillValue()//TODO 被使用技能時不累積
     {
         skillValue += addSkillValue * ADD_SKILL_RATIO * Time.deltaTime;
         if (skillValue >= MAX_SKILL_VALUE)

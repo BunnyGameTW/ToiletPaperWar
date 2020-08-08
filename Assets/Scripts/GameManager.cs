@@ -19,20 +19,30 @@ public class GameManager : MonoBehaviour
     public Image leftBarImage, rightBarImage;
     public Player cat, human;
     public Color humanSkilledBarColor, humanNormalBarColor;
+    public AudioSource audioSource;
+    public AudioClip tick, end;
+    public GameObject winGameObject;
 
     float timer;
     float toiletValue;
+    bool hasPlayEndAlert;
+
     const float TOILET_PAPER_RATIO = 0.5f;//衛生紙量
     const float MIN_TOILET_VALUE = 0.0f;//衛生紙最小值
     public const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
     public const float ATTACK_RATIO = 3.0f;//攻擊比例
-    bool isGameOver;
-    
+    enum GAME_STATE
+    {
+        PREPARE, PLAY, OVER, SHOW_WINNER, FADE
+    }
+    GAME_STATE gameState;
+
     // Start is called before the first frame update
     void Start()
     {
         toiletValue = TOILET_PAPER_RATIO * MAX_TOILET_VALUE;
-        isGameOver = false;
+        gameState = GAME_STATE.PREPARE;
+        hasPlayEndAlert = false;
         cat.attackEvent += OnPlayerAttack;
         human.attackEvent += OnPlayerAttack;
         cat.skillEvent += OnPlayerSkill;
@@ -41,23 +51,46 @@ public class GameManager : MonoBehaviour
         human.unskilledEvent += OnPlayerUnSkilled;
     }
 
+    const float SHOW_WINNER_TIME = 3.0f;
     // Update is called once per frame
     void Update()
     {
-        if (!isGameOver)
+        switch (gameState)
         {
-            float fillValue = toiletValue / MAX_TOILET_VALUE;
-            cat.SetAddSkillValue(1.0f - fillValue);
-            human.SetAddSkillValue(fillValue);
-            RefreshTimer();
-            UpdateUI();
-        }
-        else
-        {
-            human.UpdateToiletPaper(toiletValue);
-            cat.UpdateToiletPaper(toiletValue);
-            //TODO 顯示贏家
-            Debug.Log("winner->" + winner.ToString());
+            case GAME_STATE.PREPARE:
+                //TODO 倒數 或一些表演
+                gameState = GAME_STATE.PLAY;
+                break;
+            case GAME_STATE.PLAY:
+                float fillValue = toiletValue / MAX_TOILET_VALUE;
+                cat.SetAddSkillValue(1.0f - fillValue);
+                human.SetAddSkillValue(fillValue);
+                RefreshTimer();
+                UpdateUI();
+                break;
+            case GAME_STATE.OVER:
+                gameState = GAME_STATE.SHOW_WINNER;
+                audioSource.PlayOneShot(end);
+                timer = 0.0f;
+                winGameObject.SetActive(true);
+                winGameObject.transform.localPosition =
+                    winner == PlayerType.CAT ?
+                    cat.gameObject.transform.localPosition : human.gameObject.transform.localPosition;
+                break;
+            case GAME_STATE.SHOW_WINNER:
+                UpdateToiletPaper();
+                UpdateBarColor();
+                timer += Time.deltaTime;
+                if(timer >= SHOW_WINNER_TIME && GameObject.FindGameObjectWithTag("changeScene") != null)
+                {
+                    GameObject.FindGameObjectWithTag("changeScene").GetComponent<ChangeScene>().Change("Login");
+                    gameState = GAME_STATE.FADE;
+                }
+                break;
+            case GAME_STATE.FADE:
+                break;
+            default:
+                break;
         }
     }
 
@@ -70,15 +103,19 @@ public class GameManager : MonoBehaviour
             SetGameOver();
             winner = toiletValue >= MAX_TOILET_VALUE / 2 ? PlayerType.CAT : PlayerType.HUMAN;
         }
+        else if (gameTime <= 5.0f && !hasPlayEndAlert)
+        {
+            hasPlayEndAlert = true;
+            audioSource.PlayOneShot(tick);
+        }
     }
 
     void SetGameOver()
     {
-        isGameOver = true;
+        gameState = GAME_STATE.OVER;
         cat.SetGameOver();
         human.SetGameOver();
     }
-
 
     void UpdateUI()
     {
@@ -86,9 +123,18 @@ public class GameManager : MonoBehaviour
         float fillValue = toiletValue / MAX_TOILET_VALUE;
         leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
         rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
+        UpdateToiletPaper();
+        UpdateBarColor();
+    }
+
+    void UpdateToiletPaper()
+    {
         human.UpdateToiletPaper(toiletValue);
         cat.UpdateToiletPaper(toiletValue);
+    }
 
+    void UpdateBarColor()
+    {
         if (human.GetIsSkilled())
         {
             rightBarImage.color = Color.Lerp(Color.white, humanSkilledBarColor, Mathf.PingPong(Time.time, 1));
