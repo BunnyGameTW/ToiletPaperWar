@@ -20,9 +20,9 @@ public class GameManager : MonoBehaviour
     public Player cat, human;
     public Color humanSkilledBarColor, humanNormalBarColor;
     public AudioSource audioSource;
-    public AudioClip tick, end;
+    public AudioClip tick, end, start, countDown;
     public GameObject winGameObject;
-
+    public Text countDownText;
     float timer;
     float toiletValue;
     bool hasPlayEndAlert;
@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     {
         toiletValue = TOILET_PAPER_RATIO * MAX_TOILET_VALUE;
         gameState = GAME_STATE.PREPARE;
+        countDownText.transform.DOShakeScale(COUNT_DOWN_SHAKE_TIME);
+        audioSource.PlayOneShot(countDown);
         hasPlayEndAlert = false;
         cat.attackEvent += OnPlayerAttack;
         human.attackEvent += OnPlayerAttack;
@@ -50,16 +52,36 @@ public class GameManager : MonoBehaviour
         cat.unskilledEvent += OnPlayerUnSkilled;
         human.unskilledEvent += OnPlayerUnSkilled;
     }
-
-    const float SHOW_WINNER_TIME = 3.0f;
+    const float PREPARE_TIME = 3.0f;
+    const float SHOW_WINNER_TIME = 2.5f;
+    const float COUNT_DOWN_SHAKE_TIME = 0.5f;
+    const float COUNT_DOWN_FADE_TIME = 1.0f;
     // Update is called once per frame
     void Update()
     {
         switch (gameState)
         {
             case GAME_STATE.PREPARE:
-                //TODO 倒數 或一些表演
-                gameState = GAME_STATE.PLAY;
+                //TODO 或一些表演
+                int beforeCountDownNumber = Mathf.CeilToInt(PREPARE_TIME - timer);
+                timer += Time.deltaTime;
+                int countDownNumber = Mathf.CeilToInt(PREPARE_TIME - timer);
+                if (countDownNumber != beforeCountDownNumber)
+                {
+                    audioSource.PlayOneShot(countDown);
+                    countDownText.text = countDownNumber.ToString();
+                    countDownText.transform.DOShakeScale(COUNT_DOWN_SHAKE_TIME);
+                }
+                if (timer >= PREPARE_TIME)
+                {
+                    countDownText.text = "START!";
+                    countDownText.transform.DOShakeScale(COUNT_DOWN_SHAKE_TIME);
+                    countDownText.DOFade(0, COUNT_DOWN_FADE_TIME);
+                    audioSource.PlayOneShot(start);
+                    timer = 0.0f;
+                    gameState = GAME_STATE.PLAY;
+                  
+                }
                 break;
             case GAME_STATE.PLAY:
                 float fillValue = toiletValue / MAX_TOILET_VALUE;
@@ -78,6 +100,7 @@ public class GameManager : MonoBehaviour
                     cat.gameObject.transform.localPosition : human.gameObject.transform.localPosition;
                 break;
             case GAME_STATE.SHOW_WINNER:
+                UpdateBarFillAmount();
                 UpdateToiletPaper();
                 UpdateBarColor();
                 timer += Time.deltaTime;
@@ -120,19 +143,27 @@ public class GameManager : MonoBehaviour
     void UpdateUI()
     {
         timeText.text = Mathf.Ceil(gameTime).ToString();
-        float fillValue = toiletValue / MAX_TOILET_VALUE;
-        leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
-        rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
+        UpdateBarFillAmount();
         UpdateToiletPaper();
         UpdateBarColor();
     }
 
+    //更新bar值UI
+    void UpdateBarFillAmount()
+    {
+        float fillValue = toiletValue / MAX_TOILET_VALUE;
+        leftBarImage.fillAmount = DOVirtual.EasedValue(leftBarImage.fillAmount, fillValue, 0.5f, Ease.InOutBack);
+        rightBarImage.fillAmount = DOVirtual.EasedValue(rightBarImage.fillAmount, 1.0f - fillValue, 0.5f, Ease.InOutBack);//感覺沒效
+    }
+
+    //更新衛生紙動態
     void UpdateToiletPaper()
     {
         human.UpdateToiletPaper(toiletValue);
         cat.UpdateToiletPaper(toiletValue);
     }
 
+    //更新bar顏色
     void UpdateBarColor()
     {
         if (human.GetIsSkilled())
@@ -146,6 +177,7 @@ public class GameManager : MonoBehaviour
     }
 
     //event
+    //玩家攻擊事件
     void OnPlayerAttack(object sender, AttackEventArgs param)
     {
         float minus = param.playerType == PlayerType.CAT ? 1 : -1;
@@ -165,6 +197,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //玩家使用技能事件
     void OnPlayerSkill(object sender, SkillEventArgs param)
     {
         if(param.playerType == PlayerType.CAT)
@@ -177,6 +210,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //玩家結束使用技能事件
     void OnPlayerUnSkilled(object sender, SkillEventArgs param)
     {
         if (param.playerType == PlayerType.CAT)

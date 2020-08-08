@@ -32,24 +32,10 @@ public class Human : Player
             {
                 HandleBeSkilled();
             }
-
-            if (Input.GetKeyDown(input.attack))
-            {
-                audioSource.PlayOneShot(isSkilled ? skilled : attack);
-                attackImage.sprite = attackSpriteL;
-                attackImage.SetNativeSize();
-                attackImage.rectTransform.localPosition = attackPositionL.localPosition;
-            }
-            else if (Input.GetKeyUp(input.attack))
-            {
-                attackImage.sprite = normalSpriteL;
-                attackImage.SetNativeSize();
-                attackImage.rectTransform.localPosition = normalPositionL.localPosition;
-            }
         }
     }
 
-
+   
     public float GetSkillTimer()
     {
         return skillTimer;
@@ -78,7 +64,24 @@ public class Human : Player
             skillImage.SetNativeSize();
             skillImage.rectTransform.localPosition = normalPositionR.localPosition;
         }
-      
+    }
+
+    public override void DetectInput()
+    {
+        base.DetectInput();
+        if (Input.GetKeyDown(input.attack))
+        {
+            audioSource.PlayOneShot(isSkilled ? skilled : attack);
+            attackImage.sprite = attackSpriteL;
+            attackImage.SetNativeSize();
+            attackImage.rectTransform.localPosition = attackPositionL.localPosition;
+        }
+        else if (Input.GetKeyUp(input.attack))
+        {
+            attackImage.sprite = normalSpriteL;
+            attackImage.SetNativeSize();
+            attackImage.rectTransform.localPosition = normalPositionL.localPosition;
+        }
     }
 
     //檢查貓咪技能

@@ -32,28 +32,10 @@ public class Cat : Player
         {
             UpdateSkillValue();
             DetectInput();
-            if (Input.GetKeyDown(input.attack))
-            {
-                if (isSkilled)
-                {
-                    rightPawImage.sprite = skilledPawAttackRight;
-                    HandleBeSkilled();
-                    audioSource.PlayOneShot(skilled);
-                }
-                else
-                {
-                    rightPawImage.sprite = attackPawRight;
-                    audioSource.PlayOneShot(attack);
-                }
-                rightPawImage.SetNativeSize();
-            }
-            else if (Input.GetKeyUp(input.attack))
-            {
-                rightPawImage.sprite = isSkilled ? skilledPawNormalRight : normalPawRight;
-                rightPawImage.SetNativeSize();
-            }
         }
     }
+
+   
 
     //設定使用技能
     public override void SetUseSkill(bool boolean)
@@ -83,6 +65,32 @@ public class Cat : Player
         }
     }
 
+    public override void DetectInput()
+    {
+        base.DetectInput();
+        if (Input.GetKeyDown(input.attack))
+        {
+            if (isSkilled)
+            {
+                rightPawImage.sprite = skilledPawAttackRight;
+                HandleBeSkilled();
+                audioSource.PlayOneShot(skilled);
+            }
+            else
+            {
+                rightPawImage.sprite = attackPawRight;
+                audioSource.PlayOneShot(attack);
+            }
+            rightPawImage.SetNativeSize();
+        }
+        else if (Input.GetKeyUp(input.attack))
+        {
+            rightPawImage.sprite = isSkilled ? skilledPawNormalRight : normalPawRight;
+            rightPawImage.SetNativeSize();
+        }
+    }
+
+    //設定被使用技能UI
     void SetSkilledUI(bool boolean)
     {
         gameObjectPaper.SetActive(!boolean);

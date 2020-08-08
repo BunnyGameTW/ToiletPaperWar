@@ -138,7 +138,7 @@ public class Player : MonoBehaviour
     }
 
     //偵測輸入
-    protected void DetectInput()
+    public virtual void DetectInput()
     {
         CheckAttack();
         CheckSkill();
