@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class Cat : Player
 {
@@ -17,18 +18,21 @@ public class Cat : Player
     public GameObject gameObjectPaper;
     public Text canNumberText;
 
+    Vector3 originalSkillTextPosition;
+
     // Start is called before the first frame update
     void Start()
     {
         type = PlayerType.CAT;
         canCounter = 0;
+        originalSkillTextPosition = canNumberText.transform.localPosition;
         Init();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isGameOver)
+        if (gameState == GAME_STATE.PLAY)
         {
             UpdateSkillValue();
             DetectInput();
@@ -60,6 +64,8 @@ public class Cat : Player
         base.SetIsSkilled(boolean);
         if (boolean)
         {
+            canNumberText.transform.localRotation = Quaternion.identity;
+            canNumberText.transform.localPosition = originalSkillTextPosition;
             SetSkilledUI(boolean);
             canNumberText.text = "x" + CAN_NUMBER;
         }
@@ -73,6 +79,8 @@ public class Cat : Player
             if (isSkilled)
             {
                 rightPawImage.sprite = skilledPawAttackRight;
+                canNumberText.transform.DOShakePosition(0.2f, 2, 20);
+                canNumberText.transform.DOShakeRotation(0.2f);
                 HandleBeSkilled();
                 audioSource.PlayOneShot(skilled);
             }
@@ -113,6 +121,8 @@ public class Cat : Player
         {
             canCounter = 0;
             isSkilled = false;
+            canNumberText.transform.localRotation = Quaternion.identity;
+            canNumberText.transform.localPosition = originalSkillTextPosition;
             SetSkilledUI(false);
             gameObjectSkilled.SetActive(false);
             UnSkilledEvent();

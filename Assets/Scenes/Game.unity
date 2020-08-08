@@ -3198,6 +3198,7 @@ MonoBehaviour:
   attackPositionR: {fileID: 783024440}
   skillImage: {fileID: 633847122}
   attackImage: {fileID: 1873703295}
+  skillText: {fileID: 2040813249}
 --- !u!1 &1399160279
 GameObject:
   m_ObjectHideFlags: 0

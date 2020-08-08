@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
 
     float skillValue, addSkillValue;
     protected bool isSkilled, isGameOver;
+    protected GAME_STATE gameState;
     RectTransform toiletPaperParentTransform;
     public event EventHandler<AttackEventArgs> attackEvent;
     public event EventHandler<SkillEventArgs> skillEvent;
@@ -87,7 +88,7 @@ public class Player : MonoBehaviour
         );
         toiletPaperParentTransform.localPosition = new Vector3(0, y, 0);
 
-        if (!isGameOver)
+        if (gameState == GAME_STATE.PLAY)
         {
             float scaleY = Mathf.Lerp(
                 toiletPaperRollImage.rectTransform.localScale.y,
@@ -112,9 +113,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void SetGameOver()
+    public void SetGameState(GAME_STATE state)
     {
-        isGameOver = true;
+        //isGameOver = true;
+        gameState = state;
     }
 
     //private

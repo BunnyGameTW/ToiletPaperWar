@@ -9,7 +9,10 @@ public enum PlayerType
     CAT, HUMAN
 }
 
-
+public enum GAME_STATE
+{
+    PREPARE, PLAY, OVER, SHOW_WINNER, FADE
+}
 
 public class GameManager : MonoBehaviour
 {
@@ -31,10 +34,7 @@ public class GameManager : MonoBehaviour
     const float MIN_TOILET_VALUE = 0.0f;//衛生紙最小值
     public const float MAX_TOILET_VALUE = 100.0f;//衛生紙最大值
     public const float ATTACK_RATIO = 3.0f;//攻擊比例
-    enum GAME_STATE
-    {
-        PREPARE, PLAY, OVER, SHOW_WINNER, FADE
-    }
+ 
     GAME_STATE gameState;
 
     // Start is called before the first frame update
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GAME_STATE.PREPARE:
-                //TODO 或一些表演
+                //TODO 衛生紙被貓拉表演
                 int beforeCountDownNumber = Mathf.CeilToInt(PREPARE_TIME - timer);
                 timer += Time.deltaTime;
                 int countDownNumber = Mathf.CeilToInt(PREPARE_TIME - timer);
@@ -80,7 +80,8 @@ public class GameManager : MonoBehaviour
                     audioSource.PlayOneShot(start);
                     timer = 0.0f;
                     gameState = GAME_STATE.PLAY;
-                  
+                    cat.SetGameState(gameState);
+                    human.SetGameState(gameState);
                 }
                 break;
             case GAME_STATE.PLAY:
@@ -136,8 +137,8 @@ public class GameManager : MonoBehaviour
     void SetGameOver()
     {
         gameState = GAME_STATE.OVER;
-        cat.SetGameOver();
-        human.SetGameOver();
+        cat.SetGameState(gameState);
+        human.SetGameState(gameState);
     }
 
     void UpdateUI()
