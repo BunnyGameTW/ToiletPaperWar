@@ -4,7 +4,7 @@ Instructions:
 2. Human: " , " to attack, " . " to use skill  
 
 Made with: Unity 2019.3.0f3  
-More: https://bunnygame.website/2020BGJ/  
+More: https://bunnygame.tw/2020BGJ/  
 
 ![](imagePath)
 [<img src="https://img.youtube.com/vi/NCU7tYZYbXg/hqdefault.jpg">](https://youtu.be/NCU7tYZYbXg)
