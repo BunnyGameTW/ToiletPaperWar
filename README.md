@@ -1,7 +1,7 @@
-👉Introduction👈  
+【Introduction】  
 Evil cat is rolling toilet paper roll, rewind it, the war between toilet paper is starting!  
 
-✏️Dev log✏️  
+【Dev log】  
 https://bunnygame.tw/toilet-paper-war/  
 
 ![](imagePath)
